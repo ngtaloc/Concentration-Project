@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="img">
+    <file>anh-nen.jpg</file>
+    <file>hoa-cuc.jpg</file>
+    <file>icon3.png</file>
+  </qresource>
+</RCC>
