@@ -42,35 +42,12 @@ def loadDSLopHoc(TW_dstk, maLH):
                 except:
                     print()
                 TW_dstk.setItem(rowVang, column_index + i, QTableWidgetItem(value))
-
-                # ra soát lại những sinh viên chưa điểm danh của dsNgay[i] và đánh VẮNG buôi đó
-                masv = TW_dstk.item(rowVang, 0)
-                #TW_dstk.setItem(rowVang, column_index + i, QTableWidgetItem("Vắng"))
-                try:
-                    conn = DataConn.DBConnet.getConnet()
-                    query = "SELECT * FROM Diemdanh WHERE malophoc='" + maLH.split(' ')[
-                        0] + "' and masv='" + masv.text() + "' and ngaydd='" + dsNgay[i] + "'"
-                    cursor = conn.execute(query)
-                    isRecordExits = 0
-                    for rowT in cursor:
-                        isRecordExits = 1
-                    if (isRecordExits == 0):
-                        query = "insert into Diemdanh values ('" + maLH.split(' ')[0] + "', '" + masv.text() + "', '" + \
-                                dsNgay[i] + "', 'False' )"
-                        try:
-                            conn.execute(query)
-                        except Exception as e:
-                            print(e)
-                    conn.commit()
-                    conn.close()
-                except Exception as e:
-                    print(e)
-
                 rowVang = rowVang+1
 
     rowTiLeHoc = 0
     for dssv in dsLopHoc: # in ra tỉ lệ đi học của sinh viên
         tileHoc = 100 -(dssv.getVang()/len(dsNgay) * 100)  #tỉ lệ đi học = 100 - (ngày vắn / số ngày dd * 100)
+        print(dssv.getTenSV(),' - ', dssv.getVang(),' - ',len(dsNgay))
         TW_dstk.setItem(rowTiLeHoc, 5, QTableWidgetItem(str(round(tileHoc, 2))))
         rowTiLeHoc = rowTiLeHoc + 1
     return len(dsNgay)

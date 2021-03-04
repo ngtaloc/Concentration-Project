@@ -716,8 +716,33 @@ class maincode(QMainWindow):
             if self.started == False:
                 vid.release()
                 self.label_D_cam.setText('Bật camera để tiếp tục')
-                #break
                 print('Loop break')
+                try:
+                    #cur = cursor.fetchall()
+                    dsSinhVien = XLDL.xldl_SinhVien.layDSsinhVien(malophoc.split(' ')[0], ngaydd)
+
+                    for sv in dsSinhVien:
+
+                        if (sv.getVang() != 'Có'): #nếu sv chưa điểm danh thì đánh vắng sv đó
+                            conn = DataConn.DBConnet.getConnet()
+                            query = "SELECT * FROM Diemdanh WHERE malophoc='" + malophoc.split(' ')[
+                                0] + "' and masv='" + sv.getmaSV() + "' and ngaydd='" + ngaydd + "'"
+                            cursor = conn.execute(query)
+                            isRecordExits = 0
+                            for row in cursor: #kiểm tra trong data đã thêm chưa
+                                isRecordExits = 1
+                            if (isRecordExits == 0): # nếu trong data chưa có thì mới thêm
+                                query = "insert into Diemdanh values ('" + malophoc.split(' ')[
+                                    0] + "', '" + sv.getmaSV() + "', '" + ngaydd + "', 'False' )"
+                                try:
+                                    conn.execute(query)
+                                except Exception as e:
+                                    print(e)
+                            conn.commit()
+                            conn.close()
+                except Exception as e:
+                    print(e)
+                break
 
 #TAB THÊM SINH VIÊN
 
