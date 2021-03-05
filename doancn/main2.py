@@ -48,6 +48,9 @@ class maincode(QMainWindow):
         super(maincode, self).__init__()
         uic.loadUi("diemdanh2.ui", self)
 
+        self.tab = self.findChild(QTabWidget,"tabWidget")
+        self.tab.currentChanged.connect(self.chuyentab) #load lại trang khi chuyển tab
+
         # Tab điểm danh
         self.started = False
         self.btnTScam = False
@@ -59,6 +62,7 @@ class maincode(QMainWindow):
         self.DT_D_NgayDD = self.findChild(QDateTimeEdit, "dte_D_ngayDD")
         self.TW_D_dsSV = self.findChild(QTableView, "TW_D_dsSV")
         self.TW_D_dsSV.setSortingEnabled(True)
+
 
         self.btn_D_sCam.clicked.connect(self.click_btn_startcam)
         self.cbb_D_NamHoc.currentIndexChanged.connect(self.load_DD_LopHoc)
@@ -214,8 +218,20 @@ class maincode(QMainWindow):
         self.load()
         self.show()
 
+    def chuyentab(self):
+        self.load_cbb_LopHoc_MaGV()
+        self.load_TK_LH_NamHoc()
+        self.load_TK_LH_LopHoc()
+        self.load_TK_SV_TWSV()
+        self.loadDSMonHoc()
+        self.loadDSLopsinhhoat()
+        self.load_tw_LH_DSLopHoc()
+        self.load_tw_LH_DSsv()
+        self.loadSV()
+        print('chuyen tab')
 
-# pageLOAD
+
+    # pageLOAD
     def load(self):
 
         dsLop = XLDL.xldl_lop.layDSLop()
